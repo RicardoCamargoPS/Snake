@@ -14,61 +14,65 @@ public class Controle implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-       
-        if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-			Game.setGameStatos("dalay");	
-			if(Game.getGameStatos().equals("menu")){
+
+		if(e.getKeyCode() == KeyEvent.VK_ENTER) {			
+			if(Game.gameStatus == "MENU") {
 				Game.menu.enter = true;
-			}			
+			}
 		}
 		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {			
-			Game.setGameStatos("menu");
-			Game.menu.paused = true;
+			Game.gameStatus = "MENU";
+			Game.menu.pause = true;
 		}		
 
 		if(e.getKeyCode() == KeyEvent.VK_UP) {
-			if(Game.getGameStatos().equals("menu")){
+			System.out.println("tecla up precionada");
+			if(Game.gameStatus == "MENU") {
 				Game.menu.up = true;
-				System.out.println("cima precionado");
-			}	
+			}
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-			if(Game.getGameStatos().equals("menu")){
-				Game.menu.down = true;	
-				
-				System.out.println("baixo precionado");
-			}		
+			System.out.println("tecla down precionada");
+			if(Game.gameStatus == "MENU") {
+				Game.menu.down = true;
+			}
 		}
 
-		if(e.getKeyCode() == KeyEvent.VK_S) {	
-			//Game.snake.setMuving(true);
-			//Game.player.mudaDir(1);				
+		if(e.getKeyCode() == KeyEvent.VK_W && (Game.snake.downDirection == false)) {			
+			Game.snake.upDirection = true;
+			Game.snake.leftDirection = false;
+			Game.snake.rightDirection = false;			
 		}
-		if(e.getKeyCode() == KeyEvent.VK_W) {	
-			//Game.player.setMuving(true);
-			//Game.player.mudaDir(-1);		
+
+		if(e.getKeyCode() == KeyEvent.VK_S && (Game.snake.upDirection == false)) {
+			Game.snake.downDirection = true;			
+			Game.snake.leftDirection = false;
+			Game.snake.rightDirection = false;							 
+		}
+
+		if(e.getKeyCode() == KeyEvent.VK_D && (Game.snake.leftDirection == false)) {	
+			Game.snake.rightDirection = true;
+			Game.snake.downDirection = false;	
+			Game.snake.upDirection = false;			
+			
+		}
+		if(e.getKeyCode() == KeyEvent.VK_A && (Game.snake.rightDirection == false)) {			
+			Game.snake.leftDirection = true;
+			Game.snake.downDirection = false;	
+			Game.snake.upDirection = false;			
 				 
 		}
 		if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			
 		}
+	}
 
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        
-        if(e.getKeyCode() == KeyEvent.VK_S) {
-			//Pong.player.setMuving(false);
-			//Pong.player.mudaDir(0);			
-		}
-		if(e.getKeyCode() == KeyEvent.VK_W) {
-			//Pong.player.setMuving(false);
-			//Pong.player.mudaDir(0);			 
-		}	
-
-    }
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+	}
 
 }

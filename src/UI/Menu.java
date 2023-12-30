@@ -2,95 +2,79 @@ package UI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 import main.Game;
 
 public class Menu {
 
-    private int px =  (Game.WIDTH - 10) / 2;
-    private int py = 200;
-    
-    private int[] options = {0, 1, 2, 3 };
+    public String[] options = {"novo jogo","carregar jogo","sair"};
 
-    // 0 = Novo Jogo  ou   Continuar  * se o jogo estiver pausado *
-    // 1 = Carregar Jogo
-    // 2 = Opições 
-    // 3 = Sair
+	public int currentOption = 0;
+	public int maxOption = options.length - 1;
 
-    private int currentOpitions = 0;
-    private int maxOptions = options.length - 1;
-    public boolean up, down, enter;
+	public boolean up,down,enter;
 
-    public boolean paused = false;
+	public boolean pause = false;
+	public boolean agardando = false;
 
-    public void tick(){
-        if(up){
-            up = false;
-            currentOpitions--;
-            if(currentOpitions < 0)
-                currentOpitions = maxOptions;
+	public void tick() {
+		if(up) {
+			up = false;
+			currentOption--;
+			if(currentOption < 0)
+				currentOption = maxOption;
+		}
 
-        }
-        if(down){
-            down = false;
-            currentOpitions++;
-            if(currentOpitions > maxOptions)
-                currentOpitions = 0;
+		if(down) {
+			down = false;
+			currentOption++;
+			if(currentOption > maxOption)
+				currentOption = 0;
+		}
 
-        }
+		if(enter) {
+			enter = false;
+			if(options[currentOption] == "novo jogo" || options[currentOption] == "continuar") {
+				Game.gameStatus = "NORMAL";
+				pause = false;
+			}else if(options[currentOption] == "sair") {
+				System.exit(1);
+			}
+		}
+	}
 
-        if(enter){
-            enter = false;
-            if(options[currentOpitions] == 0) {
-                Game.setGameStatos("normal");                
-                paused = false;
-               
-            }
-            else if(options[currentOpitions] == 3){
-                System.exit(1);
-            }
+	public void render(Graphics g) {	
+		
+		Font titleFont = new Font("arial",Font.BOLD,24);
+		Font optionsMenu = new Font("arial",Font.BOLD,18);
 
-        }
-    }
+		FontMetrics metrics = g.getFontMetrics(titleFont);
+		g.setColor(Color.white);	
+		g.setFont(titleFont);
 
-    public void render(Graphics g){
+		g.drawString("Snake Game", (Game.WIDTH - metrics.stringWidth("Snake Game")) / 2 , Game.HEIGHT - 320);
 
-        g.setColor(Color.white);
-        g.setFont(new Font("arial", Font.ITALIC, 14));   
-        
-        g.drawString("> Pong <", px - 29, py - 160);
+		metrics = g.getFontMetrics(optionsMenu);
+		g.setColor(Color.LIGHT_GRAY);
+		g.setFont(optionsMenu);
+		if(pause == false)
+			g.drawString("Novo jogo", (Game.WIDTH - metrics.stringWidth("Novo jogo")) / 2 , 160);
+		else
+			g.drawString("Resumir", (Game.WIDTH - metrics.stringWidth("Resumir")) / 2 , 160);
 
-        g.setColor(Color.white);
-        g.setFont(new Font("Courier New", Font.BOLD, 12));      
+		g.drawString("Carregar jogo", (Game.WIDTH - metrics.stringWidth("Carregar jogo")) / 2 , 190);
+		g.drawString("Sair", (Game.WIDTH - metrics.stringWidth("Sair")) / 2 , 220);
 
-        if(paused == false)
-            g.drawString("Novo Jogo", px - 31, py - 120);
-        
-        else
-            g.drawString("Continuar", px - 31, py * 120);
+		if(options[currentOption] == "novo jogo") {
+			g.drawString(">", (Game.WIDTH - metrics.stringWidth(">")) / 2 - 60 , 160);
+		}else if(options[currentOption] == "carregar jogo") {
+			g.drawString(">", (Game.WIDTH - metrics.stringWidth(">")) / 2 - 75, 190);
+		}else if(options[currentOption] == "sair") {
+			g.drawString(">", (Game.WIDTH - metrics.stringWidth(">")) / 2 - 30, 220);
+		}
 
-        g.drawString("Carregar Jogo", px - 44, py - 100);
-        g.drawString("Opções", px - 20, py - 80);
-        g.drawString("Sair", px - 13, py - 60);
-
-        g.setColor(new Color(50, 200, 50, 255));
-
-        if(options[currentOpitions]  == 0){
-            g.drawString(">", px - 50, py - 120);
-        }
-        else if(options[currentOpitions] == 1){
-             g.drawString(">", px - 60, py - 100);
-        }
-        else if(options[currentOpitions] == 2){
-             g.drawString(">", px - 44, py - 80);
-        }
-         else if(options[currentOpitions] == 3){
-             g.drawString(">", px - 35, py - 60);
-        }
-
-        
-    }
-
-
+	}
+	
 }

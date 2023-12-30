@@ -6,6 +6,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import UI.Menu;
+import entidades.Apple;
 import entidades.Snake;
 import windown.Windown;
 
@@ -14,35 +15,41 @@ public class Game implements Runnable{
     public final static int WIDTH = 500;
     public final static int HEIGHT = 400;
 
-
     public static Menu menu;
+    public static Apple apple;
 
     private Windown janela;
     private BufferedImage layer;
-    private Thread thread;
-    private boolean isRunning = false;
+    public static Thread thread;
+    public static boolean isRunning = false;
 
-    private Snake sanke;
-    private static String gameStatus = "menu";
+    public static Snake snake;
+    public static String gameStatus = "MENU";
 
     public Game(){
-        janela = new Windown("Tetriz Game", WIDTH, HEIGHT);
+        
+        janela = new Windown("Snake Game", WIDTH, HEIGHT);
         layer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
         menu = new Menu();
-        sanke = new Snake();
+        snake = new Snake();
+        apple = new Apple();
+        apple.locateApple();
+
     }
 
-    public void tick(){
-
-        if(gameStatus.equals("menu")){
-            menu.tick();
+    public void tick(){         
+        
+        if(gameStatus.equals("NORMAL")){            
+            snake.tick();        
+            
         }
 
-        sanke.tick();
+        if(gameStatus.equals("MENU")){
+           menu.tick();
+        }
+    }
 
-    };
-    ;
 
     public void render(){
 
@@ -56,13 +63,16 @@ public class Game implements Runnable{
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        sanke.render(g);
+        if(gameStatus.equals("NORMAL")){
+            snake.render(g);          
+            apple.render(g);
 
-
-        if(gameStatus.equals("menu")){
-            menu.render(g);
         }
 
+        if(gameStatus.equals("MENU")){
+            menu.render(g);
+        }
+        
         g = bs.getDrawGraphics();
         g.drawImage(layer, 0, 0, WIDTH, HEIGHT, null);
         g.dispose();
@@ -70,12 +80,13 @@ public class Game implements Runnable{
     
     }
 
+    
 
 
     @Override
     public void run() {
 
-        int fps = 60;
+        int fps = 10;
         double timerPertick = 1000000000 / fps;
         double deltaTime = 0;
 
@@ -86,19 +97,18 @@ public class Game implements Runnable{
             
             nowTime = System.nanoTime();
             deltaTime +=(nowTime - lastTime) / timerPertick;
-            lastTime = nowTime;
+            lastTime = nowTime;           
 
-            if(deltaTime >= 1){
+            if(deltaTime >= 1){          
+
                 tick();
-                render();
-
+                render();                
                 deltaTime = 0;
-            }
 
+            }
         }
 
-        stop();
-        
+        stop();        
     }
 
     public synchronized void start(){
@@ -112,7 +122,7 @@ public class Game implements Runnable{
 
     }
 
-    public synchronized void stop(){
+    public synchronized static void stop(){
         if(thread == null) return;
         isRunning = false;
 

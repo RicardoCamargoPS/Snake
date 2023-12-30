@@ -14,22 +14,22 @@ public class Windown {
     private JFrame janela;
     private Controle controle;
 
-
     public Windown(String title, int width, int height){
         canvas = new Canvas();
         janela = new JFrame();
+        controle = new Controle();
 
         canvas.setSize(new Dimension(width, height));
 
         janela = new JFrame();
-        janela.add(canvas);
-       
+        janela.addKeyListener(controle);
+        janela.add(canvas);       
         janela.pack();
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        janela.setResizable(false);
-        janela.addKeyListener(controle);
+        janela.setResizable(false);        
         janela.setLocationRelativeTo(null);
         janela.setVisible(true);
+        janela.setFocusable(true);
         
     }
 
