@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import UI.Menu;
 import entidades.Apple;
+import entidades.Pear;
 import entidades.Snake;
 import windown.Windown;
 
@@ -17,6 +18,7 @@ public class Game implements Runnable{
 
     public static Menu menu;
     public static Apple apple;
+    public static Pear pear;
 
     private Windown janela;
     private BufferedImage layer;
@@ -34,6 +36,9 @@ public class Game implements Runnable{
         menu = new Menu();
         snake = new Snake();
         apple = new Apple();
+        pear = new Pear();
+
+        pear.locatePear();
         apple.locateApple();
 
     }
@@ -41,7 +46,7 @@ public class Game implements Runnable{
     public void tick(){         
         
         if(gameStatus.equals("NORMAL")){            
-            snake.tick();        
+            snake.tick();  
             
         }
 
@@ -55,7 +60,7 @@ public class Game implements Runnable{
 
         BufferStrategy bs = janela.getBufferStrategy();
         if(bs == null){
-            janela.createBufferStrategy();
+            janela.createBufferStrategy(); 
             bs = janela.getBufferStrategy();
         }
 
@@ -65,7 +70,7 @@ public class Game implements Runnable{
 
         if(gameStatus.equals("NORMAL")){
             snake.render(g);          
-            apple.render(g);
+            pear.render(g);
 
         }
 

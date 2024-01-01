@@ -91,7 +91,13 @@ public class Snake {
             Game.apple.locateApple();
 
         }
-        
+
+        if ((px[0] == Game.pear.px ) && (py[0] == Game.pear.py)) {
+    
+            length++;
+            Game.pear.locatePear();
+
+        }
         
     }
 
